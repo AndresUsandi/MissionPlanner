@@ -42,6 +42,9 @@ namespace Dowding
             cmb_server.Text = Settings.Instance["Dowding_server"];
             chk_enable.Checked = Settings.Instance.GetBoolean("Dowding_enabled", false);
 
+            txt_onvifip.Text = Settings.Instance["Dowding_onvifipport"];
+            txt_onvifuser.Text = Settings.Instance["Dowding_onvifusername"];
+            txt_onvifpassword.Text = Settings.Instance["Dowding_onvifpassword"];
 
             CMB_serialport.Items.AddRange(SerialPort.GetPortNames());
             CMB_serialport.Items.Add("TCP Host - 14551");
@@ -244,6 +247,51 @@ namespace Dowding
                 listener.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), listener);
             }
             catch { }
+        }
+
+        private void but_onvif_Click(object sender, EventArgs e)
+        {
+            var ip = "127.0.0.1";
+            var port = 80;
+            var ipport = txt_onvifip.Text;
+            var user = txt_onvifuser.Text;
+            var password = txt_onvifpassword.Text;
+
+            Settings.Instance["Dowding_onvifipport"] = ipport;
+            Settings.Instance["Dowding_onvifusername"] = user;
+            Settings.Instance["Dowding_onvifpassword"] = password;
+            Settings.Instance.Save();
+
+            if (ipport.Contains(":"))
+            {
+                ip = ipport.Split(':')[0];
+                port = int.Parse(ipport.Split(':')[1]);
+            }
+            else
+            {
+                ip = ipport;
+            }
+            
+            Task.Run(async () =>
+            {
+                try
+                {
+                    var device = await new OnvifDevice(ip, port, user, password).Setup().ConfigureAwait(false);
+                    var threadrun = true;
+
+                    while (threadrun)
+                    {
+                        Thread.Sleep(1000);
+                        await device.SetTrack(MainV2.comPort.MAV.cs.TrackerLocation,
+                            MainV2.comPort.MAV.cs.Location).ConfigureAwait(false);
+                    }
+                }
+                catch
+                {
+                    CustomMessageBox.Show("Failed to connect/send to tracker");
+                    return;
+                }
+            });
         }
     }
 }

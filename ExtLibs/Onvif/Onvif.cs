@@ -36,7 +36,7 @@ namespace Onvif
             Password = password;
         }
         
-        public void SetTrack(PointLatLngAlt myposition, PointLatLngAlt target)
+        public async Task SetTrack(PointLatLngAlt myposition, PointLatLngAlt target)
         {
             var bearing = myposition.GetBearing(target);
 
@@ -55,7 +55,7 @@ namespace Onvif
             // in zoom X
             var z = (float) MathHelper.mapConstrained(fov, FOVMax, FOVMin, ZoomMin, ZoomMax);
 
-            SetRPYAsync(0, Math.Atan(heightdelta / distance) * rad2deg, bearing, z);
+            await SetRPYAsync(0, Math.Atan(heightdelta / distance) * rad2deg, bearing, z);
         }
 
 
