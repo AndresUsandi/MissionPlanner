@@ -611,6 +611,22 @@
     <None Include="MissionPlanner.GCSViews.ConfigurationView.ConfigHWCompass2+CompassDeviceInfo.datasource" />
     <None Include="plugins\example10-canlogfile.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="plugins\GpsDroneTrackerPlugin.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="plugins\GpsDroneTracker\Azimuth.cs" />
+    <Compile Include="plugins\GpsDroneTracker\AzimuthInput.cs" />
+    <Compile Include="plugins\GpsDroneTracker\AzimuthMath.cs" />
+    <Compile Include="plugins\GpsDroneTracker\AzimuthResult.cs" />
+    <Compile Include="plugins\GpsDroneTracker\GpsTrackerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="plugins\GpsDroneTracker\GpsTrackerControl.Designer.cs">
+      <DependentUpon>GpsTrackerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="plugins\GpsDroneTracker\Location.cs" />
+    <Compile Include="plugins\GpsDroneTracker\Point.cs" />
     </None>
     <None Include="plugins\example11-trace.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -635,7 +651,8 @@
     </None>
     <None Include="plugins\example7-canrtcm.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Compile>
+    <None Include="plugins\GpsDroneTracker\GpsDroneTracker.ino" />
     <None Include="plugins\InitialParamsCalculator.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1792,6 +1809,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\paramcompare.resx">
       <DependentUpon>paramcompare.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="plugins\GpsDroneTracker\GpsTrackerControl.resx">
+      <DependentUpon>GpsTrackerControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Utilities\AirMarket.resx">
       <DependentUpon>AirMarket.cs</DependentUpon>
