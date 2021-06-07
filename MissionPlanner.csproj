@@ -35,8 +35,8 @@
     <TargetFrameworkProfile />
     <ProjectTypeGuids>{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-<RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
-<RunAnalyzers>false</RunAnalyzers>
+    <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+    <RunAnalyzers>false</RunAnalyzers>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <OutputPath>bin\Debug\net461\</OutputPath>
@@ -612,6 +612,21 @@
     <Compile Include="plugins\example10-canlogfile.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="plugins\GpsDroneTrackerPlugin.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="plugins\GpsDroneTracker\Azimuth.cs" />
+    <Compile Include="plugins\GpsDroneTracker\AzimuthInput.cs" />
+    <Compile Include="plugins\GpsDroneTracker\AzimuthMath.cs" />
+    <Compile Include="plugins\GpsDroneTracker\AzimuthResult.cs" />
+    <Compile Include="plugins\GpsDroneTracker\GpsTrackerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="plugins\GpsDroneTracker\GpsTrackerControl.Designer.cs">
+      <DependentUpon>GpsTrackerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="plugins\GpsDroneTracker\Location.cs" />
+    <Compile Include="plugins\GpsDroneTracker\Point.cs" />
     <Compile Include="Utilities\AirMarket.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -633,6 +648,7 @@
     <Compile Include="plugins\example7-canrtcm.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <None Include="plugins\GpsDroneTracker\GpsDroneTracker.ino" />
     <None Include="plugins\InitialParamsCalculator.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1789,6 +1805,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\paramcompare.resx">
       <DependentUpon>paramcompare.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="plugins\GpsDroneTracker\GpsTrackerControl.resx">
+      <DependentUpon>GpsTrackerControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Utilities\AirMarket.resx">
       <DependentUpon>AirMarket.cs</DependentUpon>
