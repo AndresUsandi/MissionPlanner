@@ -761,15 +761,23 @@ namespace MissionPlanner.Joystick
 
             if (manual_control)
             {
-                min = -1000;
-                max = 1000;
-                trim = 0;
+                if (chan == 3)  // throttle
+                {
+                    min = 0;
+                    max = 1000;
+                    trim = 500;
+                }
+                else
+                {
+                    min = -1000;
+                    max = 1000;
+                    trim = 0;
+                }
             }
 
             if (chan == 3)
             {
-                trim = (min + max)/2;
-                //                trim = min; // throttle
+                trim = (min + max) / 2;
             }
 
             int range = Math.Abs(max - min);

@@ -62,6 +62,15 @@ namespace MissionPlanner.Joystick
             {
             } // IF 1 DOESNT EXIST NONE WILL
 
+            try
+            {
+                if (Settings.Instance.ContainsKey("manual_control"))
+                    chk_manualcontrol.Checked = bool.Parse(Settings.Instance["manual_control"].ToString());
+            }
+            catch
+            {
+            } // IF 1 DOESNT EXIST NONE WILL
+
             var tempjoystick = JoystickBase.Create(() => MainV2.comPort);
 
             label14.Text += " " + MainV2.comPort.MAV.cs.firmware.ToString();
@@ -115,6 +124,21 @@ namespace MissionPlanner.Joystick
                     this.Width = ax.Right;
             }
 
+            noButtons = 16;
+
+            var maxctl = Controls.Find("axis" + 1, false).FirstOrDefault();
+
+            for (int f = 0; f < noButtons; f++)
+            {
+                string name = (f).ToString();
+
+                doButtontoUI(name, maxctl.Right + 100, maxctl.Top + f * maxctl.Height);
+
+                var config = tempjoystick.getButton(f);
+
+                tempjoystick.setButton(f, config);
+            }
+
             this.ResumeLayout();
 
             if (MainV2.joystick != null && MainV2.joystick.enabled)
@@ -154,6 +178,7 @@ namespace MissionPlanner.Joystick
                 var joy = JoystickBase.Create(() => MainV2.comPort);
 
                 joy.elevons = CHK_elevons.Checked;
+                joy.manual_control = chk_manualcontrol.Checked;
 
                 //show error message if a joystick is not connected when Enable is clicked
                 if (!joy.start(CMB_joysticks.Text))
@@ -197,6 +222,7 @@ namespace MissionPlanner.Joystick
             MainV2.joystick.saveconfig();
 
             Settings.Instance["joy_elevons"] = CHK_elevons.Checked.ToString();
+            Settings.Instance["manual_control"] = chk_manualcontrol.Checked.ToString();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -218,6 +244,8 @@ namespace MissionPlanner.Joystick
                         }
 
                         joy.elevons = CHK_elevons.Checked;
+
+                        joy.manual_control = chk_manualcontrol.Checked;
 
                         joy.AcquireJoystick(CMB_joysticks.Text);
 
@@ -252,6 +280,7 @@ namespace MissionPlanner.Joystick
                     }
 
                     MainV2.joystick.elevons = CHK_elevons.Checked;
+                    MainV2.joystick.manual_control = chk_manualcontrol.Checked;
 
                     MainV2.comPort.MAV.cs.rcoverridech1 = joy.getValueForChannel(1);
                     MainV2.comPort.MAV.cs.rcoverridech2 = joy.getValueForChannel(2);
@@ -519,6 +548,10 @@ namespace MissionPlanner.Joystick
 
         private void chk_manualcontrol_CheckedChanged(object sender, EventArgs e)
         {
+            if (MainV2.joystick == null)
+            {
+                return;
+            }
             MainV2.joystick.manual_control = chk_manualcontrol.Checked;
         }
 

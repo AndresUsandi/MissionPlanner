@@ -1177,6 +1177,15 @@
 
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="plugins\GpsDroneTrackerPlugin.cs" />
+    <Compile Include="plugins\gpsdronetracker\Azimuth.cs" />
+    <Compile Include="plugins\gpsdronetracker\AzimuthInput.cs" />
+    <Compile Include="plugins\gpsdronetracker\AzimuthMath.cs" />
+    <Compile Include="plugins\gpsdronetracker\AzimuthResult.cs" />
+    <Compile Include="plugins\gpsdronetracker\GpsTrackerControl.cs" />
+    <Compile Include="plugins\gpsdronetracker\GpsTrackerControl.Designer.cs" />
+    <Compile Include="plugins\gpsdronetracker\Location.cs" />
+    <Compile Include="plugins\gpsdronetracker\Point.cs" />
     <Compile Include="SikRadio\ISikRadioForm.cs" />
     <Compile Include="SikRadio\RFD900.cs" />
     <Compile Include="SikRadio\RFDLib\Array.cs" />
@@ -1189,5 +1198,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="plugins\example23-switch.resx" />
+    <EmbeddedResource Include="plugins\gpsdronetracker\GpsTrackerControl.resx" />
   </ItemGroup>
 </Project>
