@@ -57,11 +57,32 @@ namespace GPSDroneTracker
             try
             {
                 gpsTracker = new GPSTrackerControl();
+                gpsTracker.ConnectDisconnect.Click += ConnectDisconnect_Click;
                 gpsTracker.StartStop.Click += StartStop_Click;
-                gpsTracker.SetHome.Click += SetHome_Click;
+                gpsTracker.SetHome.Click += SetDrone_Click;
                 gpsTracker.SetTestBedroom.Click += SetTestBedroom_Click;
                 gpsTracker.SetTestBackyard.Click += SetTestBackyard_Click;
                 gpsTracker.Reset.Click += Reset_Click;
+                gpsTracker.HomeLatitude.TextChanged += (s, e) =>
+                {
+                    if (double.TryParse(gpsTracker.HomeLatitude.Text, out double val))
+                        homeLat = val;
+                };
+                gpsTracker.HomeLongitude.TextChanged += (s, e) =>
+                {
+                    if (double.TryParse(gpsTracker.HomeLongitude.Text, out double val))
+                        homeLon = val;
+                };
+                gpsTracker.HomeAltitude.TextChanged += (s, e) =>
+                {
+                    if (double.TryParse(gpsTracker.HomeAltitude.Text, out double val))
+                        homeAlt = val;
+                };
+                gpsTracker.HomeHeading.TextChanged += (s, e) =>
+                {
+                    if (double.TryParse(gpsTracker.HomeHeading.Text, out double val))
+                        homeHeading = val;
+                };
                 ThemeManager.ApplyThemeTo(gpsTracker);
 
                 TabPage controlTabPage = new TabPage("GPS Drone Tracker");
@@ -93,22 +114,43 @@ namespace GPSDroneTracker
 
         private void SetTestBedroom_Click(object sender, EventArgs e)
         {
-            SetHome_Click(sender, e);
+            lastAzimuth = double.NaN;
+            lastElevation = double.NaN;
+            minChangeAngle = double.Parse(gpsTracker.MinChangeDegrees.Text);
+            minDistance = double.Parse(gpsTracker.MinDistanceMeters.Text);
             homeLat = 47.713972;
             homeLon = -122.223321;
             homeAlt = 130;
             homeHeading = 71;
+            gpsTracker.BeginInvoke(new Action(() =>
+            {
+                gpsTracker.HomeLatitude.Text = $"{homeLat:0.000000}";
+                gpsTracker.HomeLongitude.Text = $"{homeLon:0.000000}";
+                gpsTracker.HomeAltitude.Text = $"{homeAlt:0.00}";
+                gpsTracker.HomeHeading.Text = $"{(short)homeHeading:0}";
+            }));
         }
+
         private void SetTestBackyard_Click(object sender, EventArgs e)
         {
-            SetHome_Click(sender, e);
+            lastAzimuth = double.NaN;
+            lastElevation = double.NaN;
+            minChangeAngle = double.Parse(gpsTracker.MinChangeDegrees.Text);
+            minDistance = double.Parse(gpsTracker.MinDistanceMeters.Text);
             homeLat = 47.7138736678448;
             homeLon = -122.223428785801;
             homeAlt = 120;
             homeHeading = 90;
+            gpsTracker.BeginInvoke(new Action(() =>
+            {
+                gpsTracker.HomeLatitude.Text = $"{homeLat:0.000000}";
+                gpsTracker.HomeLongitude.Text = $"{homeLon:0.000000}";
+                gpsTracker.HomeAltitude.Text = $"{homeAlt:0.00}";
+                gpsTracker.HomeHeading.Text = $"{(short)homeHeading:0}";
+            }));
         }
 
-        private void SetHome_Click(object sender, EventArgs e)
+        private void SetDrone_Click(object sender, EventArgs e)
         {
             lastAzimuth = double.NaN;
             lastElevation = double.NaN;
@@ -127,25 +169,39 @@ namespace GPSDroneTracker
             }));
         }
 
-        private void StartStop_Click(object sender, EventArgs e)
+        private void ConnectDisconnect_Click(object sender, EventArgs e)
         {
             if (!isRunning)
             {
-                lastAzimuth = double.NaN;
-                lastElevation = double.NaN;
-                minChangeAngle = double.Parse(gpsTracker.MinChangeDegrees.Text);
-                minDistance = double.Parse(gpsTracker.MinDistanceMeters.Text);
-                gpsTracker.StartStop.Text = "Stop";
-                isRunning = true;
+                gpsTracker.ConnectDisconnect.Text = "Disconnect";
                 serialPort = new SerialPort(gpsTracker.ComPortList.Text, 115000);
                 serialPort.Open();
             }
             else
             {
-                gpsTracker.StartStop.Text = "Start";
-                isRunning = false;
+                gpsTracker.ConnectDisconnect.Text = "Connect";
                 serialPort.Close();
                 serialPort.Dispose();
+            }
+        }
+        private void StartStop_Click(object sender, EventArgs e)
+        {
+            if (serialPort != null && serialPort.IsOpen)
+            {
+                if (!isRunning)
+                {
+                    lastAzimuth = double.NaN;
+                    lastElevation = double.NaN;
+                    minChangeAngle = double.Parse(gpsTracker.MinChangeDegrees.Text);
+                    minDistance = double.Parse(gpsTracker.MinDistanceMeters.Text);
+                    gpsTracker.StartStop.Text = "Stop";
+                    isRunning = true;
+                }
+                else
+                {
+                    gpsTracker.StartStop.Text = "Start";
+                    isRunning = false;
+                }
             }
         }
 
